@@ -19,6 +19,8 @@ public abstract class Entity {
 
     protected ContactListener listener;
 
+    public Object data;
+
     public Entity(float x, float y, float width, float height, boolean fixed) {
         this.position = new Vec2(x, y);
         this.width = width;
