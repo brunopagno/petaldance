@@ -3,7 +3,7 @@ package br.com.lunaria.physics;
 public class ManualEntity extends Entity {
 
     public ManualEntity(float x, float y, float width, float height) {
-        super(x, y, width, height, false);
+        super(x, y, width, height, true);
     }
 
     @Override

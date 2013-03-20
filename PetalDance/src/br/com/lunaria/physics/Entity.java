@@ -92,10 +92,6 @@ public abstract class Entity {
     }
 
     protected void processCollision() {
-        if (this.fixed) {
-            return;
-        }
-
         contacts.clear();
 
         preProcessCollision();

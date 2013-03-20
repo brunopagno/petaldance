@@ -6,6 +6,7 @@ public class GravityEntity extends Entity {
     public Vec2 topSpeed;
     public float drag;
     private Vec2 push;
+    private boolean filterFixed;
 
     public GravityEntity(float x, float y, float width, float height) {
         this(x, y, width, height, 0);
@@ -18,6 +19,11 @@ public class GravityEntity extends Entity {
         this.topSpeed = new Vec2(Float.MAX_VALUE, Float.MAX_VALUE);
         this.drag = drag;
         this.push = new Vec2();
+        this.filterFixed = true;
+    }
+
+    public void setFilterFixed(boolean filterFixed) {
+        this.filterFixed = filterFixed;
     }
 
     public void impulse(float x, float y) {
@@ -32,6 +38,10 @@ public class GravityEntity extends Entity {
 
     @Override
     protected void executeOnCollision(Entity entity, int side, float distance_x, float distance_y) {
+        if (filterFixed && !entity.fixed) {
+            return;
+        }
+
         if ((side & Contact.LEFT) == Contact.LEFT) {
             push.x += distance_x;
         } else if ((side & Contact.RIGHT) == Contact.RIGHT) {
