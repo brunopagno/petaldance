@@ -7,19 +7,9 @@ public class Universe {
     public float gravity;
     public ArrayList<Entity> entities;
 
-    protected Vec2 origin;
-    protected Vec2 limit;
-
     public Universe(float gravity) {
         entities = new ArrayList<Entity>(32);
         this.gravity = gravity;
-        origin = new Vec2(Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY);
-        limit = new Vec2(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
-    }
-
-    public void setLimits(float x, float y, float w, float h) {
-        origin.set(x, y);
-        limit.set(w, h);
     }
 
     public void add(Entity entity) {

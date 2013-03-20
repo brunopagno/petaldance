@@ -31,7 +31,7 @@ public class GravityEntity extends Entity {
     }
 
     @Override
-    protected void processContact(int side, float distance_x, float distance_y) {
+    protected void executeOnCollision(Entity entity, int side, float distance_x, float distance_y) {
         if ((side & Contact.LEFT) == Contact.LEFT) {
             push.x += distance_x;
         } else if ((side & Contact.RIGHT) == Contact.RIGHT) {
@@ -78,19 +78,6 @@ public class GravityEntity extends Entity {
         }
         if (Math.abs(push.y) > 0.02f) {
             speed.y = 0;
-        }
-
-        if (position.x < universe.origin.x) {
-            position.x = universe.origin.x;
-        }
-        if (position.y < universe.origin.y) {
-            position.y = universe.origin.y;
-        }
-        if (position.x > universe.limit.x) {
-            position.x = universe.limit.x;
-        }
-        if (position.y > universe.limit.y) {
-            position.y = universe.limit.y;
         }
     }
 

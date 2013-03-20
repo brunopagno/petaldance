@@ -148,7 +148,7 @@ public abstract class Entity {
             }
 
             if (!filtered) {
-                processContact(side, distance_x, distance_y);
+                executeOnCollision(entity, side, distance_x, distance_y);
             }
 
             if (!filtered && !lastContacts.contains(entity)) {
@@ -184,7 +184,7 @@ public abstract class Entity {
 
     protected abstract void preProcessCollision();
 
-    protected abstract void processContact(int side, float distance_x, float distance_y);
+    protected abstract void executeOnCollision(Entity entity, int side, float distance_x, float distance_y);
 
     public abstract void update(float dt);
 

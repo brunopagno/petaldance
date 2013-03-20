@@ -6,6 +6,9 @@ public class Contact {
     public static final int DOWN = 2;
     public static final int LEFT = 4;
     public static final int RIGHT = 8;
+    public static final int HORIZONTAL = 12;
+    public static final int VERTICAL = 3;
+    public static final int ALL = 15;
 
     public Entity entity;
     public int side;

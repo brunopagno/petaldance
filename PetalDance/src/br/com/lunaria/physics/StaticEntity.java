@@ -7,23 +7,15 @@ public class StaticEntity extends Entity {
     }
 
     @Override
-    protected void preProcessCollision() {
-        // nothing
-    }
+    protected void preProcessCollision() {}
 
     @Override
-    protected void processContact(int side, float distance_x, float distance_y) {
-        // nothing
-    }
+    protected void executeOnCollision(Entity entity, int side, float distance_x, float distance_y) {}
 
     @Override
-    public void update(float dt) {
-        // nothing
-    }
+    public void update(float dt) {}
 
     @Override
-    public void postUpdate() {
-        // nothing
-    }
+    public void postUpdate() {}
 
 }

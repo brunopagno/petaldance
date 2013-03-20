@@ -10,7 +10,7 @@ public class ManualEntity extends Entity {
     protected void preProcessCollision() {}
 
     @Override
-    protected void processContact(int side, float distance_x, float distance_y) {}
+    protected void executeOnCollision(Entity entity, int side, float distance_x, float distance_y) {}
 
     @Override
     public void update(float dt) {}
