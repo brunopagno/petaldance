@@ -11,14 +11,13 @@ import javax.swing.JPanel;
 
 import br.com.lunaria.physics.Entity;
 import br.com.lunaria.physics.GravityEntity;
-import br.com.lunaria.physics.ManualEntity;
 import br.com.lunaria.physics.Universe;
 
 @SuppressWarnings("serial")
 public class PetalDanceRender extends JPanel implements Runnable, KeyListener {
 
     private Universe map;
-    private float power = 20;
+    private float power = 40;
     private boolean left;
     private boolean right;
     private GravityEntity love;
@@ -85,12 +84,6 @@ public class PetalDanceRender extends JPanel implements Runnable, KeyListener {
 
     private void updateMap() {
         map.update(1f / 60f);
-
-        for (Entity entity : map.entities) {
-            if (entity instanceof ManualEntity) {
-                ((ManualEntity) entity).position.y -= 1f / 20f;
-            }
-        }
     }
 
     @Override
@@ -101,9 +94,9 @@ public class PetalDanceRender extends JPanel implements Runnable, KeyListener {
         if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
             right = true;
         }
-        if (e.getKeyCode() == KeyEvent.VK_UP) {
+        if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_Z || e.getKeyCode() == KeyEvent.VK_SPACE) {
             love.speed.y = 0;
-            love.impulse(0, power * 10);
+            love.impulse(0, power * 14);
         }
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             attack[0] = (int) love.position.x;

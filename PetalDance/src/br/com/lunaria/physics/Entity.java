@@ -112,36 +112,49 @@ public abstract class Entity {
 
             float distance_x = getHorizontalDistance(entity);
             float distance_y = getVerticalDistance(entity);
+            float fdx = Math.abs(distance_x);
+            float fdy = Math.abs(distance_y);
 
-            if (Math.abs(distance_x) < Math.abs(distance_y)) {
-                if (position.x < entity.position.x) {
-                    if ((entity.contactFilter & Contact.LEFT) == Contact.LEFT
-                            || (this.contactFilter & Contact.RIGHT) == Contact.RIGHT) {
-                        filteredContacts.add(entity);
-                        filtered = true;
+            /*
+             * Ok this is a kind of workaround.
+             * Sometimes the nonfixed entity would lose all it's jump power like if it had colided
+             * but without colliding. That was happening because the contact was in the very edge of the entity
+             * and because of the updates the contact would be processed two times, one for each axis.
+             * So this will prevent the entity from hitting such edge twice.
+             */
+            if (Math.abs(fdx - fdy) > 1f) {
+                if (fdy < fdx) {
+                    if (position.y < entity.position.y) {
+                        if ((entity.contactFilter & Contact.DOWN) == Contact.DOWN
+                                || (this.contactFilter & Contact.UP) == Contact.UP) {
+                            filteredContacts.add(entity);
+                            filtered = true;
+                        }
+                        side = Contact.UP;
+                    } else {
+                        if ((entity.contactFilter & Contact.UP) == Contact.UP
+                                || (this.contactFilter & Contact.DOWN) == Contact.DOWN) {
+                            filteredContacts.add(entity);
+                            filtered = true;
+                        }
+                        side = Contact.DOWN;
                     }
-                    side = Contact.RIGHT;
                 } else {
-                    if ((entity.contactFilter & Contact.RIGHT) == Contact.RIGHT
-                            || (this.contactFilter & Contact.LEFT) == Contact.LEFT) {
-                        filteredContacts.add(entity);
-                        filtered = true;
+                    if (position.x < entity.position.x) {
+                        if ((entity.contactFilter & Contact.LEFT) == Contact.LEFT
+                                || (this.contactFilter & Contact.RIGHT) == Contact.RIGHT) {
+                            filteredContacts.add(entity);
+                            filtered = true;
+                        }
+                        side = Contact.RIGHT;
+                    } else {
+                        if ((entity.contactFilter & Contact.RIGHT) == Contact.RIGHT
+                                || (this.contactFilter & Contact.LEFT) == Contact.LEFT) {
+                            filteredContacts.add(entity);
+                            filtered = true;
+                        }
+                        side = Contact.LEFT;
                     }
-                    side = Contact.LEFT;
-                }
-            } else {
-                if (position.y < entity.position.y) {
-                    if ((entity.contactFilter & Contact.DOWN) == Contact.DOWN || (this.contactFilter & Contact.UP) == Contact.UP) {
-                        filteredContacts.add(entity);
-                        filtered = true;
-                    }
-                    side = Contact.UP;
-                } else {
-                    if ((entity.contactFilter & Contact.UP) == Contact.UP || (this.contactFilter & Contact.DOWN) == Contact.DOWN) {
-                        filteredContacts.add(entity);
-                        filtered = true;
-                    }
-                    side = Contact.DOWN;
                 }
             }
 

@@ -24,15 +24,19 @@ public class PetalDanceDemo {
     }
 
     public static void main(String args[]) {
-        Universe map = new Universe(6);
+        Universe map = new Universe(35);
 
         map.add(new StaticEntity(0, 0, 1024, 10));
         map.add(new StaticEntity(150, 150, 80, 80));
-        map.add(new StaticEntity(150, 150, 180, 40));
-        map.add(new ManualEntity(450, 450, 180, 40));
+        map.add(new StaticEntity(150, 150, 200, 40));
+        map.add(new StaticEntity(350, 150, 140, 40));
+        map.add(new StaticEntity(350, 190, 50, 40));
+        map.add(new StaticEntity(550, 150, 140, 40));
+        map.add(new StaticEntity(750, 150, 140, 40));
+        map.add(new ManualEntity(450, 450, 140, 40));
 
-        GravityEntity hero = new GravityEntity(200, 60, 40, 10);
-        hero.drag = 8;
+        GravityEntity hero = new GravityEntity(200, 60, 32, 64);
+        hero.drag = 14;
         map.add(hero);
 
         map.add(new GravityEntity(400, 60, 24, 12));
