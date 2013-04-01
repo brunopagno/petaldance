@@ -122,7 +122,7 @@ public abstract class Entity {
              * and because of the updates the contact would be processed two times, one for each axis.
              * So this will prevent the entity from hitting such edge twice.
              */
-            if (Math.abs(fdx - fdy) > 1f) {
+            if (Math.abs(fdx - fdy) > 3f) {
                 if (fdy < fdx) {
                     if (position.y < entity.position.y) {
                         if ((entity.contactFilter & Contact.DOWN) == Contact.DOWN
@@ -162,11 +162,25 @@ public abstract class Entity {
                 executeOnCollision(entity, side, distance_x, distance_y);
             }
 
+            for (int j = 0; j < maintenedContacts.size(); j++) {
+                Contact mc = maintenedContacts.get(j);
+                if (entity == mc.entity) {
+                    if (side > 0 && mc.side != side) {
+                        endContact(mc);
+                        Contact nmc = new Contact(entity, side);
+                        beginContact(nmc);
+                        maintenedContacts.remove(j);
+                        maintenedContacts.add(nmc);
+                    }
+                }
+            }
+
             if (!filtered && !lastContacts.contains(entity)) {
                 Contact contact = new Contact(entity, side);
                 maintenedContacts.add(contact);
                 beginContact(contact);
             }
+
         }
 
         for (int i = 0; i < filteredContacts.size(); i++) {
