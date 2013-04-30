@@ -12,10 +12,12 @@ public class Contact {
 
     public Entity entity;
     public int side;
+    public boolean filtered;
 
-    public Contact(Entity entity, int side) {
+    public Contact(Entity entity, int side, boolean filtered) {
         this.entity = entity;
         this.side = side;
+        this.filtered = filtered;
     }
 
     public static boolean overlap(Entity e1, Entity e2) {

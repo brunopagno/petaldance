@@ -11,7 +11,6 @@ import javax.swing.JPanel;
 
 import br.com.lunaria.physics.Entity;
 import br.com.lunaria.physics.GravityEntity;
-import br.com.lunaria.physics.ManualEntity;
 import br.com.lunaria.physics.Universe;
 
 @SuppressWarnings("serial")
@@ -22,7 +21,7 @@ public class PetalDanceRender extends JPanel implements Runnable, KeyListener {
     private boolean left;
     private boolean right;
     private GravityEntity love;
-    private ManualEntity man;
+    //    private ManualEntity manual;
     private int[] attack = new int[4];
 
     public PetalDanceRender(Universe map) {
@@ -32,9 +31,9 @@ public class PetalDanceRender extends JPanel implements Runnable, KeyListener {
                 this.love = (GravityEntity) entity;
                 break;
             }
-            if (entity instanceof ManualEntity) {
-                this.man = (ManualEntity) entity;
-            }
+            //            if (entity instanceof ManualEntity) {
+            //                this.manual = (ManualEntity) entity;
+            //            }
         }
         this.love.topSpeed.x = 255;
     }
@@ -79,7 +78,7 @@ public class PetalDanceRender extends JPanel implements Runnable, KeyListener {
                 love.impulse(power, 0);
             }
 
-            man.position.y -= 1f;
+            //            man.position.y -= 1f;
 
             try {
                 Thread.sleep(17);

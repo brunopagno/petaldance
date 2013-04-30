@@ -25,6 +25,20 @@ public class PetalDanceDemo {
 
     }
 
+    private static class Supreme2 implements ContactListener {
+
+        @Override
+        public void beginContact(Contact contact) {
+            System.out.println("ON " + contact.side);
+        }
+
+        @Override
+        public void endContact(Contact contact) {
+            System.out.println("OFF " + contact.side);
+        }
+
+    }
+
     public PetalDanceDemo(Universe map) {
         PetalDanceRender render = new PetalDanceRender(map);
 
@@ -57,6 +71,11 @@ public class PetalDanceDemo {
         //        hero.setContactListener(new Supreme());
         hero.drag = 14;
         map.add(hero);
+
+        StaticEntity second = new StaticEntity(100, 92, 30, 40);
+        second.setContactFilter(Contact.HORIZONTAL);
+        second.setContactListener(new Supreme2());
+        map.add(second);
 
         map.add(new GravityEntity(400, 60, 24, 12));
 

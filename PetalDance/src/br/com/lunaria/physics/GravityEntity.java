@@ -37,7 +37,7 @@ public class GravityEntity extends Entity {
     }
 
     @Override
-    protected void executeOnCollision(Entity entity, int side, float distance_x, float distance_y) {
+    protected void executeProcessCollision(Entity entity, int side, float distance_x, float distance_y) {
         if (filterFixed && !entity.fixed) {
             return;
         }

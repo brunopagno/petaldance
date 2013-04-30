@@ -11,9 +11,8 @@ public abstract class Entity {
     public float width;
     public float height;
 
-    protected ArrayList<Entity> contacts;
+    protected ArrayList<Entity> currentContacts;
     protected ArrayList<Entity> lastContacts;
-    protected ArrayList<Entity> filteredContacts;
     protected ArrayList<Contact> maintenedContacts;
     protected int contactFilter;
 
@@ -27,9 +26,8 @@ public abstract class Entity {
         this.height = height;
         this.fixed = fixed;
 
-        this.contacts = new ArrayList<Entity>(8);
+        this.currentContacts = new ArrayList<Entity>(8);
         this.lastContacts = new ArrayList<Entity>(8);
-        this.filteredContacts = new ArrayList<Entity>(8);
         this.maintenedContacts = new ArrayList<Contact>(8);
 
         this.contactFilter = 0;
@@ -94,19 +92,17 @@ public abstract class Entity {
     }
 
     protected void processCollision() {
-        contacts.clear();
-
         preProcessCollision();
 
         for (int i = 0; i < universe.entities.size(); i++) {
-            Entity contact = universe.entities.get(i);
-            if (!filteredContacts.contains(contact) && !(contact == this) && Contact.overlap(this, contact)) {
-                contacts.add(contact);
+            Entity entity = universe.entities.get(i);
+            if (!(entity == this) && Contact.overlap(this, entity)) {
+                currentContacts.add(entity);
             }
         }
 
-        for (int i = 0; i < contacts.size(); i++) {
-            Entity entity = contacts.get(i);
+        for (int i = 0; i < currentContacts.size(); i++) {
+            Entity entity = currentContacts.get(i);
             int side = 0;
             boolean filtered = false;
 
@@ -127,14 +123,12 @@ public abstract class Entity {
                     if (position.y < entity.position.y) {
                         if ((entity.contactFilter & Contact.DOWN) == Contact.DOWN
                                 || (this.contactFilter & Contact.UP) == Contact.UP) {
-                            filteredContacts.add(entity);
                             filtered = true;
                         }
                         side = Contact.UP;
                     } else {
                         if ((entity.contactFilter & Contact.UP) == Contact.UP
                                 || (this.contactFilter & Contact.DOWN) == Contact.DOWN) {
-                            filteredContacts.add(entity);
                             filtered = true;
                         }
                         side = Contact.DOWN;
@@ -143,14 +137,12 @@ public abstract class Entity {
                     if (position.x < entity.position.x) {
                         if ((entity.contactFilter & Contact.LEFT) == Contact.LEFT
                                 || (this.contactFilter & Contact.RIGHT) == Contact.RIGHT) {
-                            filteredContacts.add(entity);
                             filtered = true;
                         }
                         side = Contact.RIGHT;
                     } else {
                         if ((entity.contactFilter & Contact.RIGHT) == Contact.RIGHT
                                 || (this.contactFilter & Contact.LEFT) == Contact.LEFT) {
-                            filteredContacts.add(entity);
                             filtered = true;
                         }
                         side = Contact.LEFT;
@@ -158,58 +150,53 @@ public abstract class Entity {
                 }
             }
 
-            if (!filtered) {
-                executeOnCollision(entity, side, distance_x, distance_y);
-            }
+            Contact contact = null;
 
             for (int j = 0; j < maintenedContacts.size(); j++) {
-                Contact mc = maintenedContacts.get(j);
-                if (entity == mc.entity) {
-                    if (side > 0 && mc.side != side) {
-                        endContact(mc);
-                        Contact nmc = new Contact(entity, side);
-                        beginContact(nmc);
-                        maintenedContacts.remove(j);
-                        maintenedContacts.add(nmc);
-                    }
+                Contact maintenedContact = maintenedContacts.get(j);
+                if (maintenedContact.entity == entity) {
+                    contact = maintenedContact;
                 }
             }
 
-            if (!filtered && !lastContacts.contains(entity)) {
-                Contact contact = new Contact(entity, side);
-                maintenedContacts.add(contact);
+            if (contact == null) {
+                contact = new Contact(entity, side, filtered);
                 beginContact(contact);
+                maintenedContacts.add(contact);
             }
 
-        }
+            if (!contact.filtered && side > 0 && contact.side != side) {
+                endContact(contact);
+                Contact newMaintenedContact = new Contact(entity, side, filtered);
+                beginContact(newMaintenedContact);
+                maintenedContacts.remove(contact);
+                maintenedContacts.add(newMaintenedContact);
+            }
 
-        for (int i = 0; i < filteredContacts.size(); i++) {
-            contacts.remove(filteredContacts.get(i));
-        }
-
-        for (int i = filteredContacts.size() - 1; i >= 0; i--) {
-            if (!Contact.overlap(this, filteredContacts.get(i))) {
-                filteredContacts.remove(i);
+            if (!contact.filtered) {
+                executeProcessCollision(entity, side, distance_x, distance_y);
             }
         }
 
         for (int i = maintenedContacts.size() - 1; i >= 0; i--) {
             Contact contact = maintenedContacts.get(i);
-            if (!contacts.contains(contact.entity)) {
+            if (!currentContacts.contains(contact.entity)) {
                 maintenedContacts.remove(i);
                 endContact(contact);
             }
         }
 
         lastContacts.clear();
-        for (int i = 0; i < contacts.size(); i++) {
-            lastContacts.add(contacts.get(i));
+        for (int i = 0; i < currentContacts.size(); i++) {
+            lastContacts.add(currentContacts.get(i));
         }
+
+        currentContacts.clear();
     }
 
     protected abstract void preProcessCollision();
 
-    protected abstract void executeOnCollision(Entity entity, int side, float distance_x, float distance_y);
+    protected abstract void executeProcessCollision(Entity entity, int side, float distance_x, float distance_y);
 
     public abstract void update(float dt);
 
