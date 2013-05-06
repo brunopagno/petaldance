@@ -111,42 +111,31 @@ public abstract class Entity {
             float fdx = Math.abs(distance_x);
             float fdy = Math.abs(distance_y);
 
-            /*
-             * Ok this is a kind of workaround.
-             * Sometimes the nonfixed entity would lose all it's jump power like if it had colided
-             * but without colliding. That was happening because the contact was in the very edge of the entity
-             * and because of the updates the contact would be processed two times, one for each axis.
-             * So this will prevent the entity from hitting such edge twice.
-             */
-            if (Math.abs(fdx - fdy) > 3f) {
-                if (fdy < fdx) {
-                    if (position.y < entity.position.y) {
-                        if ((entity.contactFilter & Contact.DOWN) == Contact.DOWN
-                                || (this.contactFilter & Contact.UP) == Contact.UP) {
-                            filtered = true;
-                        }
-                        side = Contact.UP;
-                    } else {
-                        if ((entity.contactFilter & Contact.UP) == Contact.UP
-                                || (this.contactFilter & Contact.DOWN) == Contact.DOWN) {
-                            filtered = true;
-                        }
-                        side = Contact.DOWN;
+            if (fdy < fdx) {
+                if (position.y < entity.position.y) {
+                    if ((entity.contactFilter & Contact.DOWN) == Contact.DOWN || (this.contactFilter & Contact.UP) == Contact.UP) {
+                        filtered = true;
                     }
+                    side = Contact.UP;
                 } else {
-                    if (position.x < entity.position.x) {
-                        if ((entity.contactFilter & Contact.LEFT) == Contact.LEFT
-                                || (this.contactFilter & Contact.RIGHT) == Contact.RIGHT) {
-                            filtered = true;
-                        }
-                        side = Contact.RIGHT;
-                    } else {
-                        if ((entity.contactFilter & Contact.RIGHT) == Contact.RIGHT
-                                || (this.contactFilter & Contact.LEFT) == Contact.LEFT) {
-                            filtered = true;
-                        }
-                        side = Contact.LEFT;
+                    if ((entity.contactFilter & Contact.UP) == Contact.UP || (this.contactFilter & Contact.DOWN) == Contact.DOWN) {
+                        filtered = true;
                     }
+                    side = Contact.DOWN;
+                }
+            } else {
+                if (position.x < entity.position.x) {
+                    if ((entity.contactFilter & Contact.LEFT) == Contact.LEFT
+                            || (this.contactFilter & Contact.RIGHT) == Contact.RIGHT) {
+                        filtered = true;
+                    }
+                    side = Contact.RIGHT;
+                } else {
+                    if ((entity.contactFilter & Contact.RIGHT) == Contact.RIGHT
+                            || (this.contactFilter & Contact.LEFT) == Contact.LEFT) {
+                        filtered = true;
+                    }
+                    side = Contact.LEFT;
                 }
             }
 
