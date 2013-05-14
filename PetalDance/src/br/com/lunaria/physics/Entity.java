@@ -111,6 +111,17 @@ public abstract class Entity {
             float fdx = Math.abs(distance_x);
             float fdy = Math.abs(distance_y);
 
+            /*
+             * Okay, this code is a bit more important than I thought so, JUST KEEP IT HERE.
+             * The idea is that if the collision is too near the border of the box it can identify
+             * that it happened on the wrong side, making the collision look and feel crappy. So
+             * to simplify stuff I just filter collisions too near the edges. The numer 10f is absolutelly
+             * and completely made up with no scientific base, just some random tests. Hope it works forever.
+             */
+            if (!(fdx > 10f || fdy > 10f)) {
+                continue;
+            }
+
             if (fdy < fdx) {
                 if (position.y < entity.position.y) {
                     if ((entity.contactFilter & Contact.DOWN) == Contact.DOWN || (this.contactFilter & Contact.UP) == Contact.UP) {
