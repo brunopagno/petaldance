@@ -2,6 +2,7 @@ package br.com.lunaria.physics;
 
 public class Contact {
 
+    public static final int NONE = 0;
     public static final int UP = 1;
     public static final int DOWN = 2;
     public static final int LEFT = 4;
